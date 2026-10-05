@@ -1,5 +1,5 @@
 import {
-  LEAD_TYPES, QUAL_FIELDS, QUARTIERS, SCORE_CRITERIA, DOC_LIST, tempOf,
+  LEAD_TYPES, QUAL_FIELDS, QUARTIERS, SCORE_CRITERIA, DOC_LIST, rdvKind, clientResult,
   type LeadType, type Source, type Status, type Temp,
 } from "./domain";
 
