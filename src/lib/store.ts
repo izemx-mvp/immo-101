@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import { toast } from "sonner";
 import { generate, makeLead, agentReply, scoreFor, NOW, type State, type Lead, type Rdv, type Activity, type Relance } from "./seed";
 import { clientResult, rdvKind, tempOf, LEAD_TYPES, STATUS_LABEL, type LeadType, type Source, type Status, type Temp } from "./domain";
@@ -9,8 +9,11 @@ let history: State[] = [];
 const emit = () => listeners.forEach((l) => l());
 
 export function getState() { return state; }
+const subscribe = (l: () => void) => { listeners.add(l); return () => { listeners.delete(l); }; };
 export function useStore<T>(sel: (s: State) => T): T {
-  return useSyncExternalStore((l) => { listeners.add(l); return () => listeners.delete(l); }, () => sel(state), () => sel(state));
+  const cache = useRef<{ s: State; v: T } | null>(null);
+  const get = () => { if (!cache.current || cache.current.s !== state) cache.current = { s: state, v: sel(state) }; return cache.current.v; };
+  return useSyncExternalStore(subscribe, get, get);
 }
 export const CURRENT_USER = "Zoubida Labdi";
 
@@ -132,7 +135,7 @@ export function startTicker() {
     const ls = state.leads.filter((l) => l.status !== "perdu");
     const l = ls[Math.floor(Math.random() * ls.length)];
     const t = lines[Math.floor(Math.random() * lines.length)];
-    state = { ...state, feed: [{ id: uid(), at: Date.now(), kind: t.startsWith("Relance") ? "relance" : t.startsWith("Fiche") ? "property" : "qualified", text: `${t} ${l.name}`, leadId: l.id }, ...state.feed].slice(0, 300) };
+    state = { ...state, feed: [{ id: uid(), at: Date.now(), kind: (t.startsWith("Relance") ? "relance" : t.startsWith("Fiche") ? "property" : "qualified") as State["feed"][number]["kind"], text: `${t} ${l.name}`, leadId: l.id }, ...state.feed].slice(0, 300) };
     emit();
   }, 9000);
 }

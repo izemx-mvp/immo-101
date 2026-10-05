@@ -26,7 +26,7 @@ export const TYPE_ICON: Record<LeadType, React.ComponentType<{ className?: strin
 const TYPE_TONE: Record<LeadType, Tone> = { acheteur: "primary", locataire: "info", vendeur: "warning", bailleur: "success", investisseur: "neutral", autre: "cold" };
 export function TypeBadge({ t, short }: { t: LeadType; short?: boolean }) {
   const I = TYPE_ICON[t];
-  return <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap", TONE[TYPE_TONE[t]], t === "investisseur" && "bg-ink text-ink-foreground")}><I className="size-3.5" />{short ? TYPE_LABEL[t].replace("Propriétaire ", "") : TYPE_LABEL[t]}</span>;
+  return <span className={cn("inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap", TONE[TYPE_TONE[t]], t === "investisseur" && "bg-ink text-ink-foreground")}><I className="size-3.5" />{short ? { acheteur: "Acheteur", locataire: "Locataire", vendeur: "Vendeur", bailleur: "Bailleur", investisseur: "Investisseur", autre: "Autre" }[t] : TYPE_LABEL[t]}</span>;
 }
 export const SOURCE_ICON: Record<Source, React.ComponentType<{ className?: string }>> = { whatsapp: MessageCircle, email: Mail, site: Globe, instagram: Instagram };
 export function SourceIcon({ s, label }: { s: Source; label?: boolean }) {
