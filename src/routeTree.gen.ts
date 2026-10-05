@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppAnnoncesRouteImport } from './routes/_app/annonces'
 import { Route as AppTableauDeBordRouteImport } from './routes/_app/tableau-de-bord'
+import { Route as AppUtilisateursRouteImport } from './routes/_app/utilisateurs'
 import { Route as AppProspectionIndexRouteImport } from './routes/_app/prospection.index'
 import { Route as AppProspectionLeadIdRouteImport } from './routes/_app/prospection.$leadId'
 
@@ -24,9 +26,19 @@ const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppAnnoncesRoute = AppAnnoncesRouteImport.update({
+  id: '/annonces',
+  path: '/annonces',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppTableauDeBordRoute = AppTableauDeBordRouteImport.update({
   id: '/tableau-de-bord',
   path: '/tableau-de-bord',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppUtilisateursRoute = AppUtilisateursRouteImport.update({
+  id: '/utilisateurs',
+  path: '/utilisateurs',
   getParentRoute: () => AppRoute,
 } as any)
 const AppProspectionIndexRoute = AppProspectionIndexRouteImport.update({
@@ -42,13 +54,17 @@ const AppProspectionLeadIdRoute = AppProspectionLeadIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/annonces': typeof AppAnnoncesRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/utilisateurs': typeof AppUtilisateursRoute
   '/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/prospection/': typeof AppProspectionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/annonces': typeof AppAnnoncesRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/utilisateurs': typeof AppUtilisateursRoute
   '/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/prospection': typeof AppProspectionIndexRoute
 }
@@ -56,20 +72,36 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
+  '/_app/annonces': typeof AppAnnoncesRoute
   '/_app/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/_app/utilisateurs': typeof AppUtilisateursRoute
   '/_app/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/_app/prospection/': typeof AppProspectionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tableau-de-bord' | '/prospection/$leadId' | '/prospection/'
+  fullPaths:
+    | '/'
+    | '/annonces'
+    | '/tableau-de-bord'
+    | '/utilisateurs'
+    | '/prospection/$leadId'
+    | '/prospection/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tableau-de-bord' | '/prospection/$leadId' | '/prospection'
+  to:
+    | '/'
+    | '/annonces'
+    | '/tableau-de-bord'
+    | '/utilisateurs'
+    | '/prospection/$leadId'
+    | '/prospection'
   id:
     | '__root__'
     | '/'
     | '/_app'
+    | '/_app/annonces'
     | '/_app/tableau-de-bord'
+    | '/_app/utilisateurs'
     | '/_app/prospection/$leadId'
     | '/_app/prospection/'
   fileRoutesById: FileRoutesById
@@ -95,11 +127,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/annonces': {
+      id: '/_app/annonces'
+      path: '/annonces'
+      fullPath: '/annonces'
+      preLoaderRoute: typeof AppAnnoncesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/tableau-de-bord': {
       id: '/_app/tableau-de-bord'
       path: '/tableau-de-bord'
       fullPath: '/tableau-de-bord'
       preLoaderRoute: typeof AppTableauDeBordRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/utilisateurs': {
+      id: '/_app/utilisateurs'
+      path: '/utilisateurs'
+      fullPath: '/utilisateurs'
+      preLoaderRoute: typeof AppUtilisateursRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/prospection/': {
@@ -120,13 +166,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppAnnoncesRoute: typeof AppAnnoncesRoute
   AppTableauDeBordRoute: typeof AppTableauDeBordRoute
+  AppUtilisateursRoute: typeof AppUtilisateursRoute
   AppProspectionLeadIdRoute: typeof AppProspectionLeadIdRoute
   AppProspectionIndexRoute: typeof AppProspectionIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppAnnoncesRoute: AppAnnoncesRoute,
   AppTableauDeBordRoute: AppTableauDeBordRoute,
+  AppUtilisateursRoute: AppUtilisateursRoute,
   AppProspectionLeadIdRoute: AppProspectionLeadIdRoute,
   AppProspectionIndexRoute: AppProspectionIndexRoute,
 }
