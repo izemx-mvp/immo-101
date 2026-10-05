@@ -132,7 +132,7 @@ export function startTicker() {
     const ls = state.leads.filter((l) => l.status !== "perdu");
     const l = ls[Math.floor(Math.random() * ls.length)];
     const t = lines[Math.floor(Math.random() * lines.length)];
-    state = { ...state, feed: [{ id: uid(), at: Date.now(), kind: t.startsWith("Relance") ? "relance" : t.startsWith("Fiche") ? "property" : "qualified", text: `${t} ${l.name}`, leadId: l.id }, ...state.feed].slice(0, 300) };
+    state = { ...state, feed: [{ id: uid(), at: Date.now(), kind: (t.startsWith("Relance") ? "relance" : t.startsWith("Fiche") ? "property" : "qualified") as State["feed"][number]["kind"], text: `${t} ${l.name}`, leadId: l.id }, ...state.feed].slice(0, 300) };
     emit();
   }, 9000);
 }

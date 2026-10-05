@@ -268,6 +268,7 @@ export function SimulateDialog({ open, onOpenChange, onOpenLead }: { open: boole
   React.useEffect(() => {
     if (phase !== "reply") return;
     if (filled < sim.fields.length) { const x = setTimeout(() => setFilled((f) => f + 1), 420); return () => clearTimeout(x); }
+    return undefined;
   }, [phase, filled]);
   const start = () => {
     const ty = t === "random" ? LEAD_TYPES[Math.floor(Math.random() * 6)] : t;
@@ -278,7 +279,7 @@ export function SimulateDialog({ open, onOpenChange, onOpenLead }: { open: boole
     const l = actions.simulate(type, ch, sim.score, Object.fromEntries(sim.fields), sim.text, sim.lang);
     setLeadId(l.id); setPhase("done");
   };
-  React.useEffect(() => { if (phase === "reply" && filled >= sim.fields.length) { const x = setTimeout(finish, 500); return () => clearTimeout(x); } }, [filled, phase]);
+  React.useEffect(() => { if (phase === "reply" && filled >= sim.fields.length) { const x = setTimeout(finish, 500); return () => clearTimeout(x); } return undefined; }, [filled, phase]);
   const score = Math.round((sim.score * filled) / sim.fields.length);
   const fieldLabel = (k: string) => QUAL_FIELDS[type].find((f) => f.key === k)?.label ?? k;
   const fmt = (v: unknown) => (Array.isArray(v) ? v.join(", ") : typeof v === "boolean" ? (v ? "Oui" : "Non") : typeof v === "number" && v > 10000 ? fmtM(v) : String(v));

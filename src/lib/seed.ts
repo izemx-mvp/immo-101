@@ -275,7 +275,7 @@ export function generate(): State {
       confidence: int(72, 97), reason: cls === "Intéressé" ? "Demande explicite de visite ou de rappel" : cls === "Refusé" ? "Le contact indique avoir trouvé ailleurs" : cls === "Ambigu" ? "Réponse courte sans intention claire" : "Pas encore de réponse",
       reply: step === "Répondu" ? (cls === "Intéressé" ? "Oui ça m'intéresse, on peut visiter samedi ?" : cls === "Refusé" ? "Merci mais j'ai déjà trouvé." : "Ok, je vais voir.") : undefined,
       lastAt, paused: false, stopped: false, subject: prop ? `${prop.ref} · ${prop.type} ${prop.quartier}` : l.quartier,
-      history: steps.map((s, j) => ({ at: lastAt - (steps.length - j) * 3 * DAY, label: s, channel: camp.channel === "Email" ? "Email" : "WhatsApp", state: j < steps.length - 1 ? "lu" : "envoyé" as const })).concat(step === "Répondu" ? [{ at: lastAt, label: "Réponse reçue", channel: camp.channel === "Email" ? "Email" : "WhatsApp", state: "répondu" as const }] : []),
+      history: steps.map((s, j) => ({ at: lastAt - (steps.length - j) * 3 * DAY, label: s, channel: camp.channel === "Email" ? "Email" : "WhatsApp", state: (j < steps.length - 1 ? "lu" : "envoyé") as "lu" | "envoyé" | "répondu" })).concat(step === "Répondu" ? [{ at: lastAt, label: "Réponse reçue", channel: camp.channel === "Email" ? "Email" : "WhatsApp", state: "répondu" as const }] : []),
     };
   });
 
