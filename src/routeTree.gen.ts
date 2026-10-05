@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppTableauDeBordRouteImport } from './routes/_app/tableau-de-bord'
 import { Route as AppProspectionIndexRouteImport } from './routes/_app/prospection.index'
+import { Route as AppProspectionLeadIdRouteImport } from './routes/_app/prospection.$leadId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -33,15 +34,22 @@ const AppProspectionIndexRoute = AppProspectionIndexRouteImport.update({
   path: '/prospection/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProspectionLeadIdRoute = AppProspectionLeadIdRouteImport.update({
+  id: '/prospection/$leadId',
+  path: '/prospection/$leadId',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/prospection/': typeof AppProspectionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/prospection': typeof AppProspectionIndexRoute
 }
 export interface FileRoutesById {
@@ -49,15 +57,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/_app/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/_app/prospection/': typeof AppProspectionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tableau-de-bord' | '/prospection/'
+  fullPaths: '/' | '/tableau-de-bord' | '/prospection/$leadId' | '/prospection/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tableau-de-bord' | '/prospection'
+  to: '/' | '/tableau-de-bord' | '/prospection/$leadId' | '/prospection'
   id:
-    '__root__' | '/' | '/_app' | '/_app/tableau-de-bord' | '/_app/prospection/'
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/_app/tableau-de-bord'
+    | '/_app/prospection/$leadId'
+    | '/_app/prospection/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,16 +109,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProspectionIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/prospection/$leadId': {
+      id: '/_app/prospection/$leadId'
+      path: '/prospection/$leadId'
+      fullPath: '/prospection/$leadId'
+      preLoaderRoute: typeof AppProspectionLeadIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppTableauDeBordRoute: typeof AppTableauDeBordRoute
+  AppProspectionLeadIdRoute: typeof AppProspectionLeadIdRoute
   AppProspectionIndexRoute: typeof AppProspectionIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppTableauDeBordRoute: AppTableauDeBordRoute,
+  AppProspectionLeadIdRoute: AppProspectionLeadIdRoute,
   AppProspectionIndexRoute: AppProspectionIndexRoute,
 }
 

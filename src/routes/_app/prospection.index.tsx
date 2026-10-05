@@ -9,6 +9,7 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DataTable, DrawerNav, useUrlState, type Col, type Chip } from "@/components/DataTable";
 import { Avatar, Highlight, Panel, Pill, Progress, ScoreRing, Seg, SourceIcon, StatusBadge, TempBadge, TypeBadge, ago, fmtDateTime, AiNote } from "@/components/kit";
 import { usePageMeta } from "@/components/AppShell";
@@ -168,11 +169,13 @@ function Prospection() {
       <SimulateDialog open={dlg === "sim"} onOpenChange={(v) => setDlg(v ? "sim" : null)} onOpenLead={open} />
       <ImportDialog open={dlg === "import"} onOpenChange={(v) => setDlg(v ? "import" : null)} />
       {bulk?.kind === "assign" && <AssignDialog ids={bulk.ids} open onOpenChange={(v) => !v && setBulk(null)} onDone={bulk.clear} />}
-      {bulk?.kind === "status" && (
-        <Confirm open onOpenChange={(v) => !v && setBulk(null)} title={`Changer le statut de ${bulk.ids.length} leads`} label="Appliquer"
-          text="Les statuts Client et Perdu demandent une saisie individuelle (résultat ou motif) depuis la fiche. Statut appliqué : " onConfirm={() => { bulk.ids.forEach((id) => actions.changeStatus(id, bulkStatus)); bulk.clear(); setBulk(null); }} />
-      )}
-      {bulk?.kind === "status" && <div className="fixed left-1/2 top-[58%] z-[60] w-72 -translate-x-1/2"><Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Status)}><SelectTrigger className="bg-card"><SelectValue /></SelectTrigger><SelectContent className="z-[70]">{STATUSES.filter((s) => s !== "client" && s !== "perdu").map((s) => <SelectItem key={s} value={s}>{STATUS_LABEL[s]}</SelectItem>)}</SelectContent></Select></div>}
+      <Dialog open={bulk?.kind === "status"} onOpenChange={(v) => !v && setBulk(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle className="font-display">Changer le statut de {bulk?.ids.length} leads</DialogTitle><DialogDescription>Client et Perdu se saisissent depuis la fiche (résultat ou motif obligatoire).</DialogDescription></DialogHeader>
+          <Select value={bulkStatus} onValueChange={(v) => setBulkStatus(v as Status)}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{STATUSES.filter((s) => s !== "client" && s !== "perdu").map((s) => <SelectItem key={s} value={s}>{STATUS_LABEL[s]}</SelectItem>)}</SelectContent></Select>
+          <DialogFooter><Button variant="outline" onClick={() => setBulk(null)}>Annuler</Button><Button onClick={() => { bulk!.ids.forEach((id) => actions.changeStatus(id, bulkStatus)); bulk!.clear(); setBulk(null); }}>Appliquer</Button></DialogFooter>
+        </DialogContent>
+      </Dialog>
       {kanbanDrop && <StatusDialog lead={kanbanDrop.lead} initial={kanbanDrop.s} open onOpenChange={(v) => !v && setKanbanDrop(null)} />}
       <Confirm open={!!del} onOpenChange={(v) => !v && setDel(null)} title="Supprimer ce lead ?" text="Le lead et ses relances seront supprimés. Vous pourrez annuler pendant 6 secondes." onConfirm={() => { actions.deleteLeads([del!]); setDel(null); }} />
     </div>
