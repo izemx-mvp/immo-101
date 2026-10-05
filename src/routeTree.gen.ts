@@ -12,10 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppAnnoncesRouteImport } from './routes/_app/annonces'
+import { Route as AppConnaissancesRouteImport } from './routes/_app/connaissances'
 import { Route as AppTableauDeBordRouteImport } from './routes/_app/tableau-de-bord'
 import { Route as AppUtilisateursRouteImport } from './routes/_app/utilisateurs'
 import { Route as AppProspectionIndexRouteImport } from './routes/_app/prospection.index'
 import { Route as AppProspectionLeadIdRouteImport } from './routes/_app/prospection.$leadId'
+import { Route as AppRelancesIndexRouteImport } from './routes/_app/relances.index'
+import { Route as AppRelancesCampagnesIdRouteImport } from './routes/_app/relances.campagnes.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,6 +32,11 @@ const AppRoute = AppRouteImport.update({
 const AppAnnoncesRoute = AppAnnoncesRouteImport.update({
   id: '/annonces',
   path: '/annonces',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppConnaissancesRoute = AppConnaissancesRouteImport.update({
+  id: '/connaissances',
+  path: '/connaissances',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTableauDeBordRoute = AppTableauDeBordRouteImport.update({
@@ -51,59 +59,87 @@ const AppProspectionLeadIdRoute = AppProspectionLeadIdRouteImport.update({
   path: '/prospection/$leadId',
   getParentRoute: () => AppRoute,
 } as any)
+const AppRelancesIndexRoute = AppRelancesIndexRouteImport.update({
+  id: '/relances/',
+  path: '/relances/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRelancesCampagnesIdRoute = AppRelancesCampagnesIdRouteImport.update({
+  id: '/relances/campagnes/$id',
+  path: '/relances/campagnes/$id',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/annonces': typeof AppAnnoncesRoute
+  '/connaissances': typeof AppConnaissancesRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
   '/utilisateurs': typeof AppUtilisateursRoute
   '/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/prospection/': typeof AppProspectionIndexRoute
+  '/relances/': typeof AppRelancesIndexRoute
+  '/relances/campagnes/$id': typeof AppRelancesCampagnesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/annonces': typeof AppAnnoncesRoute
+  '/connaissances': typeof AppConnaissancesRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
   '/utilisateurs': typeof AppUtilisateursRoute
   '/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/prospection': typeof AppProspectionIndexRoute
+  '/relances': typeof AppRelancesIndexRoute
+  '/relances/campagnes/$id': typeof AppRelancesCampagnesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/annonces': typeof AppAnnoncesRoute
+  '/_app/connaissances': typeof AppConnaissancesRoute
   '/_app/tableau-de-bord': typeof AppTableauDeBordRoute
   '/_app/utilisateurs': typeof AppUtilisateursRoute
   '/_app/prospection/$leadId': typeof AppProspectionLeadIdRoute
   '/_app/prospection/': typeof AppProspectionIndexRoute
+  '/_app/relances/': typeof AppRelancesIndexRoute
+  '/_app/relances/campagnes/$id': typeof AppRelancesCampagnesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/annonces'
+    | '/connaissances'
     | '/tableau-de-bord'
     | '/utilisateurs'
     | '/prospection/$leadId'
     | '/prospection/'
+    | '/relances/'
+    | '/relances/campagnes/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/annonces'
+    | '/connaissances'
     | '/tableau-de-bord'
     | '/utilisateurs'
     | '/prospection/$leadId'
     | '/prospection'
+    | '/relances'
+    | '/relances/campagnes/$id'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/_app/annonces'
+    | '/_app/connaissances'
     | '/_app/tableau-de-bord'
     | '/_app/utilisateurs'
     | '/_app/prospection/$leadId'
     | '/_app/prospection/'
+    | '/_app/relances/'
+    | '/_app/relances/campagnes/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -134,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnnoncesRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/connaissances': {
+      id: '/_app/connaissances'
+      path: '/connaissances'
+      fullPath: '/connaissances'
+      preLoaderRoute: typeof AppConnaissancesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/tableau-de-bord': {
       id: '/_app/tableau-de-bord'
       path: '/tableau-de-bord'
@@ -162,23 +205,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProspectionLeadIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/relances/': {
+      id: '/_app/relances/'
+      path: '/relances'
+      fullPath: '/relances/'
+      preLoaderRoute: typeof AppRelancesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/relances/campagnes/$id': {
+      id: '/_app/relances/campagnes/$id'
+      path: '/relances/campagnes/$id'
+      fullPath: '/relances/campagnes/$id'
+      preLoaderRoute: typeof AppRelancesCampagnesIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppAnnoncesRoute: typeof AppAnnoncesRoute
+  AppConnaissancesRoute: typeof AppConnaissancesRoute
   AppTableauDeBordRoute: typeof AppTableauDeBordRoute
   AppUtilisateursRoute: typeof AppUtilisateursRoute
   AppProspectionLeadIdRoute: typeof AppProspectionLeadIdRoute
   AppProspectionIndexRoute: typeof AppProspectionIndexRoute
+  AppRelancesIndexRoute: typeof AppRelancesIndexRoute
+  AppRelancesCampagnesIdRoute: typeof AppRelancesCampagnesIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAnnoncesRoute: AppAnnoncesRoute,
+  AppConnaissancesRoute: AppConnaissancesRoute,
   AppTableauDeBordRoute: AppTableauDeBordRoute,
   AppUtilisateursRoute: AppUtilisateursRoute,
   AppProspectionLeadIdRoute: AppProspectionLeadIdRoute,
   AppProspectionIndexRoute: AppProspectionIndexRoute,
+  AppRelancesIndexRoute: AppRelancesIndexRoute,
+  AppRelancesCampagnesIdRoute: AppRelancesCampagnesIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
