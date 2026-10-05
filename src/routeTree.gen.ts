@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppTableauDeBordRouteImport } from './routes/_app/tableau-de-bord'
+import { Route as AppProspectionIndexRouteImport } from './routes/_app/prospection.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -27,27 +28,36 @@ const AppTableauDeBordRoute = AppTableauDeBordRouteImport.update({
   path: '/tableau-de-bord',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProspectionIndexRoute = AppProspectionIndexRouteImport.update({
+  id: '/prospection/',
+  path: '/prospection/',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/prospection/': typeof AppProspectionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/prospection': typeof AppProspectionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/tableau-de-bord': typeof AppTableauDeBordRoute
+  '/_app/prospection/': typeof AppProspectionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tableau-de-bord'
+  fullPaths: '/' | '/tableau-de-bord' | '/prospection/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tableau-de-bord'
-  id: '__root__' | '/' | '/_app' | '/_app/tableau-de-bord'
+  to: '/' | '/tableau-de-bord' | '/prospection'
+  id:
+    '__root__' | '/' | '/_app' | '/_app/tableau-de-bord' | '/_app/prospection/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -78,15 +88,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTableauDeBordRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/prospection/': {
+      id: '/_app/prospection/'
+      path: '/prospection'
+      fullPath: '/prospection/'
+      preLoaderRoute: typeof AppProspectionIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
   AppTableauDeBordRoute: typeof AppTableauDeBordRoute
+  AppProspectionIndexRoute: typeof AppProspectionIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppTableauDeBordRoute: AppTableauDeBordRoute,
+  AppProspectionIndexRoute: AppProspectionIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
